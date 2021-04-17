@@ -2,14 +2,8 @@ import random
 import viterbi_a5_q9
 import figures
 from copy import deepcopy
- #TODO:
- #- generate random number, n, of symptoms 
- #- randomly select n symptoms from list
- #- random chance that they occur in healthy individuals (10%<=20%)
- #- random chance that sick patient appears healthy (10%=<20%)
- #- random chance of recovering each day (probably 1 in [2, 3, 4, 5])
- #- generate random sequence of observations from generated symptom list
 
+# Global variables: list of possible symptoms, states, and start probabilities
 possible_symptoms = ['nasuea', 'vomiting', 'coughing', 'fever', 'chills', 'sore throat', 'diarrhea', 'stuffy nose', 'aches']
 states = ('sick', 'healthy')
 start_prob = {'sick' : 1.0, 'healthy' : 0.0}
@@ -27,7 +21,6 @@ def generate_problem():
     E = generate_eMatrix(problem_symptoms, sick_appears_healthy, healthy_appears_sick) # Emission matrix
     V = viterbi_a5_q9.viterbi(observations, states, start_prob, T, E) # returns list of most likely states
     # Prints probelm statements
-    print(V)
     print_problem(problem_symptoms, sick_appears_healthy, healthy_appears_sick, recovery_chance, observations, state_diagram_path)
     # Prints solutions to generated problem
     generate_solutions(problem_symptoms, sick_appears_healthy, healthy_appears_sick, recovery_chance, observations, V)
@@ -55,7 +48,7 @@ def generate_solutions(PS, SAH, HAS, RC, Obs, V):
     print_solutions(state_labels, emission_labels, sick_to_healthy_prob, healthy_to_sick_prob, 
                     healthy_to_symptom_prob, healthy_to_symptomFree_prob, 
                     sick_to_symptom_prob, sick_to_syptomFree_prob, min_recover_days)
-    print_StudentInputAnswers(state_labels, emission_labels, sick_to_healthy_prob, healthy_to_sick_prob, 
+    print_CorrectStudentInputAnswers(state_labels, emission_labels, sick_to_healthy_prob, healthy_to_sick_prob, 
                     healthy_to_symptom_prob, healthy_to_symptomFree_prob, 
                     sick_to_symptom_prob, sick_to_syptomFree_prob, min_recover_days)
 
@@ -77,9 +70,8 @@ def print_problem(Symp, SAH, HAS, RC, Obs, ImgPath):
     + '     b) We monitored a patient over', len(Obs)+1, 'days and recorded the symptoms:', obsString,
     'What is the least number of days after which they may have been suspected to recover? Enter 0 if they did not recover.\n \n')
 
+# Prints solutions
 def print_solutions(SL, EL, SHP, HSP, HESP, HEHP, SESP, SEHP, MRD):
-#    s = list_to_string(SL)
-#    e = list_to_string(EL)
     print('\n Solutions to the randomly generated problem: ')
     print('\n \n State labels:', SL)
     print('\n Emitted symbol labels:', EL)
@@ -94,7 +86,9 @@ def print_solutions(SL, EL, SHP, HSP, HESP, HEHP, SESP, SEHP, MRD):
     print('\n Minumum number of days before patient may have recoverd', MRD)
     print('\n \n')
 
-def print_StudentInputAnswers(SL, EL, SHP, HSP, HESP, HEHP, SESP, SEHP, MRD):
+# Prints what the student should have inputted 
+def print_CorrectStudentInputAnswers(SL, EL, SHP, HSP, HESP, HEHP, SESP, SEHP, MRD):
+    # Multiple choice options
     choices = ['(a)', '(b)', '(c)', '(d)', '(e)', '(f)', '(g)', '(h)', '(i)', '(j)', '(k)', '(l)', '(m)', '(n)', '(o)', '(p)', '(q)', '(r)', '(s)', '(t)', '(u)', '(v)', '(w)', '(x)', '(y)', '(z)'] 
     E = len(EL)-1
     stateChoices = choices[0:2]
@@ -168,6 +162,7 @@ def generate_eMatrix(symptoms, sick_appears_healthy, healthy_appears_sick):
     E['healthy']['symptom free'] = 1-HAS
     return E
 
+# Picks correct figure for problem variant
 def generate_figure(symptoms):
     n = len(symptoms)
     if n == 2:
@@ -189,7 +184,7 @@ def find_healthy(V):
             occ = occ+1
     return 0
         
-
+# Turns lists to nice strings for printing
 def list_to_string(inList):
     lst = deepcopy(inList)
     s = ''
