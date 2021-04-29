@@ -4,7 +4,7 @@ import figures
 from copy import deepcopy
 
 # Global variables: list of possible symptoms, states, and start probabilities
-possible_symptoms = ['nasuea', 'vomiting', 'coughing', 'fever', 'chills', 'sore throat', 'diarrhea', 'stuffy nose', 'aches']
+possible_symptoms = ['nausea', 'vomiting', 'coughing', 'fever', 'chills', 'sore throat', 'diarrhea', 'stuffy nose', 'aches']
 states = ('sick', 'healthy')
 start_prob = {'sick' : 1.0, 'healthy' : 0.0}
 
@@ -67,7 +67,7 @@ def print_problem(Symp, SAH, HAS, RC, Obs, ImgPath):
     RC-1, 'in', RC, 'chance of becoming sick again. Assume all patients are sick at the start of the monitoring period. \n \n'
     + '     a) Label the state diagram below to represent this problem. See', ImgPath, 'for the blank state diagram.'
     + ' Label the diagram from left to right in the order that variables appear in the problem statement. \n'
-    + '     b) We monitored a patient over', len(Obs)+1, 'days and recorded the symptoms:', obsString,
+    + '     b) We monitored a patient over', len(Obs), 'days and recorded the symptoms:', obsString,
     'What is the least number of days after which they may have been suspected to recover? Enter 0 if they did not recover.\n \n')
 
 # Prints solutions
@@ -119,7 +119,8 @@ def print_CorrectStudentInputAnswers(SL, EL, SHP, HSP, HESP, HEHP, SESP, SEHP, M
 # Helper functions:
 
 def generate_symptoms():
-    nSymptoms = random.randint(2, 5)
+    #nSymptoms = random.randint(2, 5)
+    nSymptoms = 4
     temp_symptoms = possible_symptoms
     problem_symptoms = []
     for i in range(nSymptoms):
@@ -144,6 +145,7 @@ def generate_tMatrix(recovery_chance):
     T = {'sick' : {'sick' : 1-recovery_prob, 'healthy' : recovery_prob},
          'healthy' : {'sick' : 1-recovery_prob, 'healthy' : recovery_prob}
     }
+    print(T)
     return T
 
 # Generates emission matrix for Viterbi
@@ -160,6 +162,7 @@ def generate_eMatrix(symptoms, sick_appears_healthy, healthy_appears_sick):
         E['healthy'][s] = healthy_symptom_prob
     E['sick']['symptom free'] = SAH
     E['healthy']['symptom free'] = 1-HAS
+    print(E)
     return E
 
 # Picks correct figure for problem variant
